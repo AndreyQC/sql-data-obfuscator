@@ -1,0 +1,57 @@
+{
+  "ContainerName": "obfuscator",
+  "Interval": 86400000,
+  "TempPath": "C:\\temp\\sql-data-obfuscator",
+  "NullString": "(NULL)",
+  "ExtractStartDate": "7/1/2014 2:30:00 AM",
+  "ExtractEndDate": "10/1/2014 1:35:09 PM",
+  "Queries": [
+    {
+      "Name": "Employees",
+      "Enabled": true,
+      "Sql": "SELECT [empid] ,[lastname] ,[firstname] ,[title] ,[titleofcourtesy] ,[birthdate] ,[hiredate] ,[address] ,[city] ,[region] ,[postalcode] ,[country] ,[phone] ,[mgrid] ,ROW_NUMBER() OVER(ORDER BY NEWID()) AS sys_random_row_number FROM [HR].[Employees]",
+      "Type": "Sql",
+      "CommandTimeout": 30000000,
+      "Columns": [ "empid", "lastname", "firstname", "title", "titleofcourtesy", "birthdate", "hiredate", "address", "city", "region", "postalcode", "country", "phone", "mgrid" ],
+      "Parameters": [],
+      "ColumnObfucsationRules": [
+        {
+          "Column": "lastname",
+          "Enabled": true,
+          "ObfuscationRule": {
+            "RuleType": "ReplaceBySysRnd",
+            "SysRndColumn": "sys_random_row_number",
+            "Prefix": "lastname "
+          }
+        },
+        {
+          "Column": "firstname",
+          "Enabled": true,
+          "ObfuscationRule": {
+            "RuleType": "ReplaceBySysRnd",
+            "SysRndColumn": "sys_random_row_number",
+            "Prefix": "firstname "
+          }
+        }
+      ]
+    },
+    {
+      "Name": "OrderDetails",
+      "Enabled": true,
+      "Sql": "SELECT [productid],[unitprice],[qty],[discount] FROM [Sales].[OrderDetails]",
+      "Type": "Sql",
+      "CommandTimeout": 30000000,
+      "Columns": [ "productid", "unitprice", "qty", "discount" ],
+      "Parameters": [],
+      "ColumnObfucsationRules": [
+        {
+          "Column": "unitprice",
+          "Enabled": true,
+          "ObfuscationRule": {
+            "RuleType": "NumericVariance"
+          }
+        }
+      ]
+    }
+  ]
+}
